@@ -35,7 +35,7 @@ export default function Dashboard({
   }, [isSaldoVisible])
 
   return (
-    <div className="bg-base-100 rounded-box relative mt-4 p-4">
+    <div className="bg-base-100 rounded-box dark:border-base-300 relative mt-4 p-4 dark:border">
       <h2 className="text-lg font-bold">Halo 👋 Selamat {getPesanWaktu()}</h2>
       <div className="mt-2 flex items-center gap-2">
         <span>Saldo:</span>
@@ -50,7 +50,7 @@ export default function Dashboard({
           </div>
         </label>
       </div>
-      <div className="mt-2 grid grid-cols-1 gap-2 text-center sm:grid-cols-2">
+      <div className="mt-2 grid grid-cols-1 gap-2 text-center sm:grid-cols-2  ">
         <div className="bg-error/8 text-error rounded-field p-4">
           <h2>Total Pengeluaran</h2>
           <p>Rp{totalPengeluaran}</p>

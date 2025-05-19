@@ -8,7 +8,8 @@ const themes = {
 
 export default function ToggleTheme() {
   const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem('isDark') === 'true'
+    const savedTheme = localStorage.getItem('isDark')
+    return savedTheme === null ? true : savedTheme === 'true'
   })
 
   const toggleTheme = () => {

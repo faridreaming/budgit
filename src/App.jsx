@@ -1,34 +1,89 @@
-function App() {
-  const getPesanWaktu = () => {
-    const waktu = new Date()
-    const jam = waktu.getHours()
-    if (jam >= 0 && jam < 12) {
-      return 'pagi! 🌄'
-    } else if (jam >= 12 && jam < 15) {
-      return 'siang! ☀️'
-    } else if (jam >= 15 && jam < 18) {
-      return 'sore! 🌅'
-    } else {
-      return 'malam! 🌙'
-    }
-  }
+import Dashboard from './components/Dashboard'
+import Transaksi from './components/Transaksi'
+import { useState } from 'react'
+
+export default function App() {
+  const [transaksi, setTransaksi] = useState([])
+  // 0: Pengeluaran
+  // 1: Penghasilan
+  const kategori = [
+    {
+      id: 1,
+      nama: 'Hobi',
+      jenis: 1,
+      icon: '⚽',
+    },
+    {
+      id: 2,
+      nama: 'Makanan',
+      jenis: 0,
+      icon: '🍔',
+    },
+    {
+      id: 3,
+      nama: 'Transportasi',
+      jenis: 0,
+      icon: '🚗',
+    },
+    {
+      id: 4,
+      nama: 'Pendidikan',
+      jenis: 0,
+      icon: '🎓',
+    },
+    {
+      id: 5,
+      nama: 'Kesehatan',
+      jenis: 0,
+      icon: '🏥',
+    },
+    {
+      id: 6,
+      nama: 'Pekerjaan',
+      jenis: 1,
+      icon: '💼',
+    },
+    {
+      id: 7,
+      nama: 'Kebutuhan',
+      jenis: 0,
+      icon: '🛍️',
+    },
+  ]
 
   const getSisaSaldo = () => {
     return 100000
   }
 
+  const getTotalPengeluaran = () => {
+    return 100000
+  }
+
+  const getTotalPenghasilan = () => {
+    return 100000
+  }
+
+  const getTotalTransaksi = () => {
+    return 100000
+  }
+
+  const onAddPengeluaran = (newPengeluaran) => {
+    setTransaksi([...transaksi, newPengeluaran])
+    console.log(transaksi)
+    console.log(transaksi)
+  }
+
   return (
-    <div className="container mx-auto max-w-md p-4 h-screen">
+    <div className="container mx-auto h-screen max-w-md p-4">
       <h1 className="text-center text-2xl font-bold">💰 BUDGIT</h1>
       <p className="text-center">Catatan Keuangan Pribadi</p>
-      <div className="card card-border bg-base-100 w-full mt-4">
-        <div className="card-body">
-          <h2 className="card-title">Halo 👋 Selamat {getPesanWaktu()}</h2>
-          <p>Sisa saldo: Rp{getSisaSaldo()}</p>
-        </div>
-      </div>
+      <Dashboard
+        sisaSaldo={getSisaSaldo()}
+        totalPengeluaran={getTotalPengeluaran()}
+        totalPenghasilan={getTotalPenghasilan()}
+        totalTransaksi={getTotalTransaksi()}
+      />
+      <Transaksi transaksi={transaksi} kategori={kategori} onAddPengeluaran={onAddPengeluaran} />
     </div>
   )
 }
-
-export default App
