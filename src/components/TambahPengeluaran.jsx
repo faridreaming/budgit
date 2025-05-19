@@ -8,10 +8,10 @@ export default function TambahPengeluaran({ kategori, onAddPengeluaran }) {
     e.preventDefault()
     const newPengeluaran = {
       id: nanoid(),
-      jumlah: e.target.jumlah.value,
-      keterangan: e.target.keterangan.value,
       tanggal: e.target.tanggal.value,
-      idKategori: e.target.idKategori.value,
+      jumlah: parseInt(e.target.jumlah.value),
+      keterangan: e.target.keterangan.value,
+      idKategori: parseInt(e.target.idKategori.value),
       deskripsi: e.target.deskripsi.value || '',
     }
     onAddPengeluaran(newPengeluaran)
@@ -82,8 +82,8 @@ export default function TambahPengeluaran({ kategori, onAddPengeluaran }) {
             />
           </label>
           <div className="modal-action">
-            <button type="submit" className="btn btn-primary btn-md w-full">
-              Tambah
+            <button type="submit" className="btn btn-error btn-md w-full">
+              Tambah Pengeluaran
             </button>
           </div>
         </form>
