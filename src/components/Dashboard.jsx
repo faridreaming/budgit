@@ -92,7 +92,7 @@ export default function Dashboard({
             />
           </p>
         </div>
-        <div className="bg-warning/8 text-warning rounded-field p-4 font-semibold sm:col-span-2">
+        <div className="bg-accent/8 text-accent rounded-field p-4 font-semibold sm:col-span-2">
           <h2>Kamu sudah melakukan transaksi sebanyak</h2>
           <p>
             <CountUp
