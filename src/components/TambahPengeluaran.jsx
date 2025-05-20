@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
-export default function TambahPengeluaran({ kategori, onAddPengeluaran }) {
+export default function TambahPengeluaran({ kategori, onAddPengeluaran, handleJumlahChange }) {
   kategori = kategori.filter((k) => k.jenis === 0)
 
   const handleTambahPengeluaran = (e) => {
@@ -9,7 +9,7 @@ export default function TambahPengeluaran({ kategori, onAddPengeluaran }) {
     const newPengeluaran = {
       id: nanoid(),
       tanggal: e.target.tanggal.value,
-      jumlah: parseInt(e.target.jumlah.value),
+      jumlah: parseInt(e.target.jumlah.value.replace(/,/g, '')),
       keterangan: e.target.keterangan.value,
       idKategori: parseInt(e.target.idKategori.value),
       deskripsi: e.target.deskripsi.value || '',
@@ -32,11 +32,11 @@ export default function TambahPengeluaran({ kategori, onAddPengeluaran }) {
           <label className="floating-label">
             <span>Jumlah (Rp)</span>
             <input
-              type="number"
+              type="text"
               placeholder="Jumlah (Rp)"
               className="input input-md w-full"
-              step="500"
               name="jumlah"
+              onChange={handleJumlahChange}
               required
             />
           </label>
