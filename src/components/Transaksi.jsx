@@ -1,8 +1,14 @@
 import { Plus, Filter, Minus, ArrowUp, ArrowDown } from 'lucide-react'
 import TambahPengeluaran from './TambahPengeluaran'
 import TambahPenghasilan from './TambahPenghasilan'
+import formatNumber from '../functions/formatNumber'
+
 export default function Transaksi({ transaksi, kategori, onAddPengeluaran, onAddPenghasilan }) {
-  console.log(transaksi)
+  const handleJumlahChange = (e) => {
+    const formattedValue = formatNumber(e.target.value)
+    e.target.value = formattedValue
+  }
+
   return (
     <>
       <h2 className="mt-4 mb-2">Transaksi</h2>
@@ -48,7 +54,7 @@ export default function Transaksi({ transaksi, kategori, onAddPengeluaran, onAdd
                     }
                   >
                     {kategori.find((k) => k.id === t.idKategori)?.jenis === 0 ? '-' : '+'}
-                    Rp{t.jumlah}
+                    Rp{formatNumber(t.jumlah)}
                   </td>
                   <td>{t.keterangan}</td>
                 </tr>
@@ -57,8 +63,16 @@ export default function Transaksi({ transaksi, kategori, onAddPengeluaran, onAdd
           </table>
         </div>
       </div>
-      <TambahPengeluaran kategori={kategori} onAddPengeluaran={onAddPengeluaran} />
-      <TambahPenghasilan kategori={kategori} onAddPenghasilan={onAddPenghasilan} />
+      <TambahPengeluaran
+        kategori={kategori}
+        onAddPengeluaran={onAddPengeluaran}
+        handleJumlahChange={handleJumlahChange}
+      />
+      <TambahPenghasilan
+        kategori={kategori}
+        onAddPenghasilan={onAddPenghasilan}
+        handleJumlahChange={handleJumlahChange}
+      />
     </>
   )
 }
