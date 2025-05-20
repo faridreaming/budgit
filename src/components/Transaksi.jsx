@@ -1,7 +1,8 @@
-import { Plus, Filter, Minus, ArrowUp, ArrowDown } from 'lucide-react'
 import TambahPengeluaran from './TambahPengeluaran'
 import TambahPenghasilan from './TambahPenghasilan'
 import formatNumber from '../functions/formatNumber'
+import FilterOptions from './FilterOptions'
+import TransaksiButtons from './TransaksiButtons'
 
 export default function Transaksi({ transaksi, kategori, onAddPengeluaran, onAddPenghasilan }) {
   const handleJumlahChange = (e) => {
@@ -13,30 +14,9 @@ export default function Transaksi({ transaksi, kategori, onAddPengeluaran, onAdd
     <>
       <h2 className="mt-4 mb-2">Transaksi</h2>
       <div className="bg-base-100 rounded-box dark:border-base-300 p-4 dark:border">
-        <div className="flex flex-wrap justify-between gap-2">
-          <button className="btn btn-neutral btn-xs join-item">
-            <Filter className="size-4" /> Filter
-          </button>
-          <div className="join join-horizontal justify-end">
-            <button
-              className="btn btn-error btn-xs join-item"
-              onClick={() => {
-                document.getElementById('tambah-pengeluaran').showModal()
-              }}
-            >
-              <ArrowUp className="size-4" /> Pengeluaran
-            </button>
-            <button
-              className="btn btn-success btn-xs join-item"
-              onClick={() => {
-                document.getElementById('tambah-penghasilan').showModal()
-              }}
-            >
-              <ArrowDown className="size-4" /> Penghasilan
-            </button>
-          </div>
-        </div>
+        <TransaksiButtons />
         <div className="mt-2 overflow-x-auto">
+          <FilterOptions />
           <table className="table-sm table-zebra table">
             <tbody>
               {transaksi.map((t) => (
