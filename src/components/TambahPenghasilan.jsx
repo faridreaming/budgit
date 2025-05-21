@@ -17,11 +17,18 @@ export default function TambahPenghasilan({ kategori, onAddPenghasilan, handleJu
     onAddPenghasilan(newPenghasilan)
     e.target.reset()
     document.getElementById('tambah-penghasilan').close()
+
+    // Show toast notification
+    const toast = document.getElementById('toast-success')
+    toast.classList.remove('hidden')
+    setTimeout(() => {
+      toast.classList.add('hidden')
+    }, 3000)
   }
 
   return (
     <dialog id="tambah-penghasilan" className="modal">
-      <div className="modal-box dark:border-base-300 max-w-md p-4 dark:border">
+      <div className="modal-box dark:border-base-300 max-w-lg p-4 dark:border">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2 border-0">
             <X className="size-4" />

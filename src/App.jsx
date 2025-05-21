@@ -1,7 +1,11 @@
 import { nanoid } from 'nanoid'
 import Dashboard from './components/Dashboard'
-import Transaksi from './components/Transaksi'
+import RiwayatTransaksi from './components/RiwayatTransaksi'
+import TransaksiButtons from './components/TransaksiButtons'
+import TambahPengeluaran from './components/TambahPengeluaran'
+import TambahPenghasilan from './components/TambahPenghasilan'
 import { useState, useEffect } from 'react'
+import formatNumber from './functions/formatNumber'
 
 // 0: Pengeluaran
 // 1: Penghasilan
@@ -63,51 +67,47 @@ const kategori = [
 ]
 
 export default function App() {
-  const [transaksi, setTransaksi] = useState([
-    {
-      id: nanoid(),
-      tanggal: new Date(),
-      jumlah: 50000,
-      keterangan: 'Saldo Awal',
-      idKategori: 9,
-      deskripsi: 'Saldo Awal',
-    },
-  ])
-
-  const [sisaSaldo, setSisaSaldo] = useState(50000)
-  const [totalPengeluaran, setTotalPengeluaran] = useState(0)
-  const [totalPenghasilan, setTotalPenghasilan] = useState(50000)
-  const [totalTransaksi, setTotalTransaksi] = useState(50000)
-
-  useEffect(() => {
+  const [transaksi, setTransaksi] = useState(() => {
     const savedTransaksi = JSON.parse(localStorage.getItem('transaksi'))
-    const savedSisaSaldo = JSON.parse(localStorage.getItem('sisaSaldo'))
-    const savedTotalPengeluaran = JSON.parse(localStorage.getItem('totalPengeluaran'))
-    const savedTotalPenghasilan = JSON.parse(localStorage.getItem('totalPenghasilan'))
-    const savedTotalTransaksi = JSON.parse(localStorage.getItem('totalTransaksi'))
-
     if (savedTransaksi && savedTransaksi.length > 0) {
-      setTransaksi(savedTransaksi)
+      return savedTransaksi
     }
-    if (savedSisaSaldo) {
-      setSisaSaldo(savedSisaSaldo)
-    }
-    if (savedTotalPengeluaran) {
-      setTotalPengeluaran(savedTotalPengeluaran)
-    }
-    if (savedTotalPenghasilan) {
-      setTotalPenghasilan(savedTotalPenghasilan)
-    }
-    if (savedTotalTransaksi) {
-      setTotalTransaksi(savedTotalTransaksi)
-    }
-  }, [])
+    return [
+      {
+        id: nanoid(),
+        tanggal: new Date(),
+        jumlah: 50000,
+        keterangan: 'Saldo Awal',
+        idKategori: 9,
+        deskripsi: 'Saldo Awal',
+      },
+    ]
+  })
+
+  const [sisaSaldo, setSisaSaldo] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem('sisaSaldo'))
+    return saved || 50000
+  })
+  const [totalPengeluaran, setTotalPengeluaran] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem('totalPengeluaran'))
+    return saved || 0
+  })
+  const [totalPenghasilan, setTotalPenghasilan] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem('totalPenghasilan'))
+    return saved || 50000
+  })
+  const [totalTransaksi, setTotalTransaksi] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem('totalTransaksi'))
+    return saved || 50000
+  })
 
   useEffect(() => {
-    if (transaksi.length > 0) {
-      localStorage.setItem('transaksi', JSON.stringify(transaksi))
-    }
-  }, [transaksi])
+    localStorage.setItem('transaksi', JSON.stringify(transaksi))
+    localStorage.setItem('sisaSaldo', JSON.stringify(sisaSaldo))
+    localStorage.setItem('totalPengeluaran', JSON.stringify(totalPengeluaran))
+    localStorage.setItem('totalPenghasilan', JSON.stringify(totalPenghasilan))
+    localStorage.setItem('totalTransaksi', JSON.stringify(totalTransaksi))
+  }, [transaksi, sisaSaldo, totalPengeluaran, totalPenghasilan, totalTransaksi])
 
   const onAddPengeluaran = (newPengeluaran) => {
     setTransaksi([...transaksi, newPengeluaran])
@@ -123,8 +123,13 @@ export default function App() {
     setTotalTransaksi(totalTransaksi + newPenghasilan.jumlah)
   }
 
+  const handleJumlahChange = (e) => {
+    const formattedValue = formatNumber(e.target.value)
+    e.target.value = formattedValue
+  }
+
   return (
-    <div className="container mx-auto h-screen max-w-lg p-4">
+    <div className="container mx-auto flex max-w-xl flex-col p-4">
       <h1 className="text-center text-2xl font-bold">💰 BUDGIT</h1>
       <p className="text-center">Catatan Keuangan Pribadi</p>
       <Dashboard
@@ -133,12 +138,30 @@ export default function App() {
         totalPenghasilan={totalPenghasilan}
         totalTransaksi={totalTransaksi}
       />
-      <Transaksi
-        transaksi={transaksi}
+      <TransaksiButtons />
+      <div className="flex-1">
+        <RiwayatTransaksi
+          transaksi={transaksi}
+          kategori={kategori}
+          onAddPengeluaran={onAddPengeluaran}
+          onAddPenghasilan={onAddPenghasilan}
+        />
+      </div>
+      <TambahPengeluaran
         kategori={kategori}
         onAddPengeluaran={onAddPengeluaran}
-        onAddPenghasilan={onAddPenghasilan}
+        handleJumlahChange={handleJumlahChange}
       />
+      <TambahPenghasilan
+        kategori={kategori}
+        onAddPenghasilan={onAddPenghasilan}
+        handleJumlahChange={handleJumlahChange}
+      />
+      <div className="toast toast-center">
+        <div className="alert alert-success hidden" id="toast-success">
+          <span>Transaksi berhasil ditambahkan!</span>
+        </div>
+      </div>
     </div>
   )
 }

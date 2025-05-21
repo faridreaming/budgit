@@ -41,19 +41,9 @@ export default function Dashboard({
       <h2 className="text-lg font-bold">Halo 👋 Selamat {getPesanWaktu()}</h2>
       <div className="mt-2 flex items-center gap-2">
         <span>Saldo:</span>
-        <span id="sisa-saldo">
-          {isSaldoVisible ? (
-            <CountUp
-              prefix="Rp"
-              end={sisaSaldo}
-              separator="."
-              decimal=","
-              duration={2}
-              formattingFn={formatNumber}
-            />
-          ) : (
-            '********'
-          )}
+        <span id="sisa-saldo" className={sisaSaldo < 0 ? 'text-primary' : ''}>
+          Rp{sisaSaldo < 0 ? '-' : ''}
+          {isSaldoVisible ? formatNumber(Math.abs(sisaSaldo)) : '********'}
         </span>
         <label className="swap">
           <input type="checkbox" checked={isSaldoVisible} onChange={toggleSaldoVisibility} />
@@ -69,12 +59,12 @@ export default function Dashboard({
         <div className="bg-error/8 text-error rounded-field p-4 font-semibold">
           <h2>Total Pengeluaran</h2>
           <p>
+            Rp
             <CountUp
-              prefix="Rp"
               end={totalPengeluaran}
               separator="."
               decimal=","
-              duration={2}
+              duration={1}
               formattingFn={formatNumber}
             />
           </p>
@@ -82,25 +72,25 @@ export default function Dashboard({
         <div className="bg-success/8 text-success rounded-field p-4 font-semibold">
           <h2>Total Penghasilan</h2>
           <p>
+            Rp
             <CountUp
-              prefix="Rp"
               end={totalPenghasilan}
               separator="."
               decimal=","
-              duration={2}
+              duration={1}
               formattingFn={formatNumber}
             />
           </p>
         </div>
-        <div className="bg-warning/8 text-warning rounded-field p-4 font-semibold sm:col-span-2">
+        <div className="bg-accent/8 text-accent rounded-field p-4 font-semibold sm:col-span-2">
           <h2>Kamu sudah melakukan transaksi sebanyak</h2>
           <p>
+            Rp
             <CountUp
-              prefix="Rp"
               end={totalTransaksi}
               separator="."
               decimal=","
-              duration={2}
+              duration={1}
               formattingFn={formatNumber}
             />
           </p>
