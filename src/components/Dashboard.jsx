@@ -42,8 +42,8 @@ export default function Dashboard({
       <div className="mt-2 flex items-center gap-2">
         <span>Saldo:</span>
         <span id="sisa-saldo" className={sisaSaldo < 0 ? 'text-primary' : ''}>
-          Rp{sisaSaldo < 0 ? '-' : ''}
-          {isSaldoVisible ? formatNumber(Math.abs(sisaSaldo)) : '********'}
+          {sisaSaldo < 0 ? '-' : ''}Rp
+          {isSaldoVisible ? formatNumber(sisaSaldo) : '********'}
         </span>
         <label className="swap">
           <input type="checkbox" checked={isSaldoVisible} onChange={toggleSaldoVisibility} />
