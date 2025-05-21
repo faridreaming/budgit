@@ -4,7 +4,7 @@ import { Filter, ChevronDown } from 'lucide-react'
 export default function RiwayatTransaksi({ transaksi, kategori }) {
   return (
     <>
-      <div className="bg-base-100 rounded-box dark:border-base-300 p-4 dark:border">
+      <div className="bg-base-100 rounded-box dark:border-base-300 flex h-full flex-col p-4 dark:border">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">Riwayat Transaksi</h2>
           <div className="btn btn-outline">
@@ -12,7 +12,7 @@ export default function RiwayatTransaksi({ transaksi, kategori }) {
             <ChevronDown className="size-4" />
           </div>
         </div>
-        <div className="mt-2 overflow-x-auto">
+        <div className="mt-2 flex-1 overflow-x-auto">
           <table className="table-zebra table">
             <tbody>
               {transaksi.map((t) => (
