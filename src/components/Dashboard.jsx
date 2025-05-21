@@ -41,7 +41,7 @@ export default function Dashboard({
       <h2 className="text-lg font-bold">Halo 👋 Selamat {getPesanWaktu()}</h2>
       <div className="mt-2 flex items-center gap-2">
         <span>Saldo:</span>
-        <span id="sisa-saldo" className={sisaSaldo < 0 ? 'text-error' : ''}>
+        <span id="sisa-saldo" className={sisaSaldo < 0 ? 'text-primary' : ''}>
           Rp{sisaSaldo < 0 ? '-' : ''}
           {isSaldoVisible ? formatNumber(Math.abs(sisaSaldo)) : '********'}
         </span>
@@ -64,7 +64,7 @@ export default function Dashboard({
               end={totalPengeluaran}
               separator="."
               decimal=","
-              duration={2}
+              duration={1}
               formattingFn={formatNumber}
             />
           </p>
@@ -77,7 +77,7 @@ export default function Dashboard({
               end={totalPenghasilan}
               separator="."
               decimal=","
-              duration={2}
+              duration={1}
               formattingFn={formatNumber}
             />
           </p>
@@ -90,7 +90,7 @@ export default function Dashboard({
               end={totalTransaksi}
               separator="."
               decimal=","
-              duration={2}
+              duration={1}
               formattingFn={formatNumber}
             />
           </p>
