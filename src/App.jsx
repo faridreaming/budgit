@@ -134,13 +134,10 @@ export default function App() {
     const toast = document.getElementById('toast-success')
     if (toast) {
       toast.classList.remove('hidden', 'animate-out', 'fade-out', 'zoom-out')
-
       toast.classList.add('animate-in', 'fade-in', 'zoom-in')
-
       setTimeout(() => {
         toast.classList.remove('animate-in', 'fade-in', 'zoom-in')
         toast.classList.add('animate-out', 'fade-out', 'zoom-out')
-
         setTimeout(() => {
           toast.classList.add('hidden')
         }, 250)
@@ -177,7 +174,7 @@ export default function App() {
         onAddPenghasilan={onAddPenghasilan}
         handleJumlahChange={handleJumlahChange}
       />
-      <div className="toast toast-center">
+      <div className="toast toast-top toast-center">
         <div className="alert alert-success hidden duration-300" id="toast-success">
           <span>Transaksi berhasil ditambahkan!</span>
         </div>
