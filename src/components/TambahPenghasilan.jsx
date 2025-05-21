@@ -17,13 +17,6 @@ export default function TambahPenghasilan({ kategori, onAddPenghasilan, handleJu
     onAddPenghasilan(newPenghasilan)
     e.target.reset()
     document.getElementById('tambah-penghasilan').close()
-
-    // Show toast notification
-    const toast = document.getElementById('toast-success')
-    toast.classList.remove('hidden')
-    setTimeout(() => {
-      toast.classList.add('hidden')
-    }, 3000)
   }
 
   return (

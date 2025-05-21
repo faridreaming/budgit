@@ -114,6 +114,7 @@ export default function App() {
     setSisaSaldo(sisaSaldo - newPengeluaran.jumlah)
     setTotalPengeluaran(totalPengeluaran + newPengeluaran.jumlah)
     setTotalTransaksi(totalTransaksi + newPengeluaran.jumlah)
+    showToast()
   }
 
   const onAddPenghasilan = (newPenghasilan) => {
@@ -121,11 +122,30 @@ export default function App() {
     setSisaSaldo(sisaSaldo + newPenghasilan.jumlah)
     setTotalPenghasilan(totalPenghasilan + newPenghasilan.jumlah)
     setTotalTransaksi(totalTransaksi + newPenghasilan.jumlah)
+    showToast()
   }
 
   const handleJumlahChange = (e) => {
     const formattedValue = formatNumber(e.target.value)
     e.target.value = formattedValue
+  }
+
+  const showToast = () => {
+    const toast = document.getElementById('toast-success')
+    if (toast) {
+      toast.classList.remove('hidden', 'animate-out', 'fade-out', 'zoom-out')
+
+      toast.classList.add('animate-in', 'fade-in', 'zoom-in')
+
+      setTimeout(() => {
+        toast.classList.remove('animate-in', 'fade-in', 'zoom-in')
+        toast.classList.add('animate-out', 'fade-out', 'zoom-out')
+
+        setTimeout(() => {
+          toast.classList.add('hidden')
+        }, 250)
+      }, 5000)
+    }
   }
 
   return (
@@ -158,7 +178,7 @@ export default function App() {
         handleJumlahChange={handleJumlahChange}
       />
       <div className="toast toast-center">
-        <div className="alert alert-success hidden" id="toast-success">
+        <div className="alert alert-success hidden duration-300" id="toast-success">
           <span>Transaksi berhasil ditambahkan!</span>
         </div>
       </div>

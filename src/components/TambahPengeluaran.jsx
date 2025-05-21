@@ -17,14 +17,6 @@ export default function TambahPengeluaran({ kategori, onAddPengeluaran, handleJu
     onAddPengeluaran(newPengeluaran)
     e.target.reset()
     document.getElementById('tambah-pengeluaran').close()
-
-    const toast = document.getElementById('toast-success')
-    toast.classList.remove('hidden')
-    toast.classList.add('animate-in', 'fade-in', 'zoom-in', 'duration-300', 'ease-in-out')
-    setTimeout(() => {
-      toast.classList.add('hidden')
-      toast.classList.remove('animate-in', 'fade-in', 'zoom-in', 'duration-300', 'ease-in-out')
-    }, 3000)
   }
 
   return (
