@@ -1,29 +1,28 @@
-import { Plus, Filter, Minus, ArrowUp, ArrowDown } from 'lucide-react'
+import { Plus, ChevronsUp, ChevronsDown } from 'lucide-react'
 
 export default function TransaksiButtons() {
   return (
-    <div className="flex flex-wrap justify-between gap-2">
-      <button className="btn btn-neutral btn-xs join-item">
-        <Filter className="size-4" /> Filter
+    <div className="order-1 grid grid-cols-1 gap-2 p-4 sm:grid-cols-2">
+      <button
+        className="btn btn-error btn-lg sm:btn-md"
+        onClick={() => {
+          document.getElementById('tambah-pengeluaran').showModal()
+        }}
+      >
+        <Plus className="size-4" />
+        Tambah Pengeluaran
+        <ChevronsUp className="size-4" />
       </button>
-      <div className="join join-horizontal justify-end">
-        <button
-          className="btn btn-error btn-xs join-item"
-          onClick={() => {
-            document.getElementById('tambah-pengeluaran').showModal()
-          }}
-        >
-          <ArrowUp className="size-4" /> Pengeluaran
-        </button>
-        <button
-          className="btn btn-success btn-xs join-item"
-          onClick={() => {
-            document.getElementById('tambah-penghasilan').showModal()
-          }}
-        >
-          <ArrowDown className="size-4" /> Penghasilan
-        </button>
-      </div>
+      <button
+        className="btn btn-success btn-lg sm:btn-md"
+        onClick={() => {
+          document.getElementById('tambah-penghasilan').showModal()
+        }}
+      >
+        <Plus className="size-4" />
+        Tambah Penghasilan
+        <ChevronsDown className="size-4" />
+      </button>
     </div>
   )
 }
