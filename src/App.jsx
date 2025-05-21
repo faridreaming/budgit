@@ -129,7 +129,7 @@ export default function App() {
   }
 
   return (
-    <div className="container mx-auto h-screen max-w-lg p-4">
+    <div className="container mx-auto flex max-w-xl flex-col p-4">
       <h1 className="text-center text-2xl font-bold">💰 BUDGIT</h1>
       <p className="text-center">Catatan Keuangan Pribadi</p>
       <Dashboard
@@ -139,12 +139,14 @@ export default function App() {
         totalTransaksi={totalTransaksi}
       />
       <TransaksiButtons />
-      <RiwayatTransaksi
-        transaksi={transaksi}
-        kategori={kategori}
-        onAddPengeluaran={onAddPengeluaran}
-        onAddPenghasilan={onAddPenghasilan}
-      />
+      <div className="flex-1">
+        <RiwayatTransaksi
+          transaksi={transaksi}
+          kategori={kategori}
+          onAddPengeluaran={onAddPengeluaran}
+          onAddPenghasilan={onAddPenghasilan}
+        />
+      </div>
       <TambahPengeluaran
         kategori={kategori}
         onAddPengeluaran={onAddPengeluaran}
