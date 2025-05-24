@@ -5,10 +5,14 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
+  /* --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 4px); */
+  --radius-sm: calc(var(--radius) - 0px);
+  --radius-md: calc(var(--radius) - 0px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -43,7 +47,7 @@
   --font-sans: Space Grotesk, serif;
   --font-mono: Space Mono, monospace;
   --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-  --radius: 0.5rem;
+  --radius: 0rem;
   --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
   --tracking-tight: calc(var(--tracking-normal) - 0.025em);
   --tracking-wide: calc(var(--tracking-normal) + 0.025em);
@@ -70,7 +74,7 @@
 }
 
 :root {
-  --radius: 0.5rem;
+  --radius: 0rem;
   --background: oklch(0.9842 0.0034 247.8575);
   --foreground: oklch(0.2795 0.0368 260.031);
   --card: oklch(1 0 0);
@@ -158,7 +162,7 @@
   --sidebar-border: oklch(0.4461 0.0263 256.8018);
   --sidebar-ring: oklch(0.6801 0.1583 276.9349);
   --destructive-foreground: oklch(0.2077 0.0398 265.7549);
-  --radius: 0.5rem;
+  --radius: 0rem;
   --font-sans: Space Grotesk, serif;
   --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-mono: Space Mono, monospace;
