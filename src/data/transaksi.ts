@@ -1,4 +1,4 @@
-type Transaksi = {
+export type Transaksi = {
   id: number
   tanggal: Date
   jumlah: number
@@ -7,17 +7,17 @@ type Transaksi = {
   deskripsi: string | null
 }
 
-type Kategori = {
+export type Kategori = {
   id: number
   jenis: 'pengeluaran' | 'penghasilan'
   nama: string
   icon: string
 }
 
-const transaksi: Transaksi[] = [
+export const transaksi: Transaksi[] = [
   {
     id: 1,
-    tanggal: new Date('2025-05-01'),
+    tanggal: new Date('2025-05-04'),
     jumlah: 100000,
     keterangan: 'Belanja bulanan',
     kategori: {
@@ -145,6 +145,69 @@ const transaksi: Transaksi[] = [
       icon: '👪',
     },
   },
+  {
+    id: 11,
+    tanggal: new Date('2025-05-11'),
+    jumlah: 250000,
+    keterangan: 'Project design',
+    deskripsi: 'Logo design for client',
+    kategori: {
+      id: 2,
+      jenis: 'penghasilan',
+      nama: 'Gaji',
+      icon: '💼',
+    },
+  },
+  {
+    id: 12,
+    tanggal: new Date('2025-05-12'),
+    jumlah: 35000,
+    keterangan: 'Ojek online',
+    deskripsi: 'Pergi ke kampus',
+    kategori: {
+      id: 4,
+      jenis: 'pengeluaran',
+      nama: 'Transportasi',
+      icon: '🚌',
+    },
+  },
+  {
+    id: 13,
+    tanggal: new Date('2025-05-13'),
+    jumlah: 150000,
+    keterangan: 'Paket data',
+    deskripsi: 'Unlimited 30 hari',
+    kategori: {
+      id: 6,
+      jenis: 'pengeluaran',
+      nama: 'Internet',
+      icon: '🌐',
+    },
+  },
+  {
+    id: 14,
+    tanggal: new Date('2025-05-14'),
+    jumlah: 500000,
+    keterangan: 'Uang sekolah adik',
+    deskripsi: 'SPP bulan Mei',
+    kategori: {
+      id: 7,
+      jenis: 'pengeluaran',
+      nama: 'Keluarga',
+      icon: '👪',
+    },
+  },
+  {
+    id: 15,
+    tanggal: new Date('2025-05-15'),
+    jumlah: 300000,
+    keterangan: 'Freelance project',
+    deskripsi: 'Website maintenance',
+    kategori: {
+      id: 2,
+      jenis: 'penghasilan',
+      nama: 'Gaji',
+      icon: '💼',
+    },
+  },
 ]
-
-export default transaksi
