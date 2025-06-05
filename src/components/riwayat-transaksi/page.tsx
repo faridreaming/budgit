@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react'
-import type { Transaksi } from '@/data/transaksi'
-import { transaksi } from '@/data/transaksi'
 import { columns } from './columns'
 import { DataTable } from './data-table'
+import type { Kategori } from '@/data/kategori'
 
-function getData(): Promise<Transaksi[]> {
-  return Promise.resolve(transaksi)
+type Transaksi = {
+  id: number
+  tanggal: Date
+  jumlah: number
+  keterangan: string
+  kategori_id: Kategori['id']
+  deskripsi: string | null
 }
 
-export default function RiwayatTransaksi() {
-  const [data, setData] = useState<Transaksi[] | null>(null)
-
-  useEffect(() => {
-    getData().then(setData)
-  }, [])
-
-  if (!data) return <div>Loading...</div>
-
+export default function RiwayatTransaksi({ data }: { data: Transaksi[] }) {
   return <DataTable columns={columns} data={data} />
 }
