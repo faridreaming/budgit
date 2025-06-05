@@ -22,10 +22,19 @@ import { id } from 'date-fns/locale'
 import type { Kategori } from '@/data/kategori'
 import { kategori } from '@/data/kategori'
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+
+type Transaksi = {
+  id: number
+  tanggal: Date
+  jumlah: number
+  keterangan: string
+  kategori_id: Kategori['id']
+  deskripsi: string | null
+}
 
 const formSchema = z.object({
   jumlah: z.number().min(1, 'Jumlah harus lebih dari 0'),
@@ -38,7 +47,13 @@ const formSchema = z.object({
   deskripsi: z.string().optional(),
 })
 
-export default function TambahTransaksi() {
+export default function TambahTransaksi({
+  onAddTransaksi,
+  transaksi,
+}: {
+  onAddTransaksi: (transaksi: Transaksi) => void
+  transaksi: Transaksi[]
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const step = 500
   const min = 0
@@ -74,9 +89,14 @@ export default function TambahTransaksi() {
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
     setIsOpen(false)
     form.reset()
+    onAddTransaksi({
+      ...values,
+      id: transaksi.length + 1,
+      kategori_id: Number(values.kategori),
+      deskripsi: null,
+    })
   }
 
   return (
@@ -84,7 +104,7 @@ export default function TambahTransaksi() {
       <DialogTrigger asChild>
         <Button className="w-full">Tambah Transaksi</Button>
       </DialogTrigger>
-      <DialogContent className="dark:bg-card sm:max-w-lg">
+      <DialogContent className="dark:bg-card sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Tambah Transaksi</DialogTitle>
         </DialogHeader>
@@ -102,7 +122,13 @@ export default function TambahTransaksi() {
                     <div className="grid grid-cols-4 items-center gap-4">
                       <FormLabel className="justify-end-safe text-right">Jumlah (Rp)</FormLabel>
                       <div className="col-span-3 flex items-center gap-2">
-                        <Button type="button" variant="outline" size="icon" onClick={() => handleStep('decrement')}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleStep('decrement')}
+                          tabIndex={-1}
+                        >
                           <Minus />
                         </Button>
                         <FormControl>
@@ -119,7 +145,13 @@ export default function TambahTransaksi() {
                             }}
                           />
                         </FormControl>
-                        <Button type="button" variant="outline" size="icon" onClick={() => handleStep('increment')}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleStep('increment')}
+                          tabIndex={-1}
+                        >
                           <Plus />
                         </Button>
                       </div>

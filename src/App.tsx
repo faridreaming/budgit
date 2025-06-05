@@ -1,3 +1,5 @@
+'use client'
+
 import { ThemeProvider } from '@/components/theme-provider'
 import { ModeToggle } from '@/components/mode-toggle'
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
@@ -6,6 +8,10 @@ import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
 import TambahTransaksi from '@/components/TambahTransaksi'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Kategori } from '@/data/kategori'
+import { toast } from 'sonner'
+import { Toaster } from '@/components/ui/sonner'
+import { useState, useEffect } from 'react'
+import { Button } from './components/ui/button'
 
 type Transaksi = {
   id: number
@@ -16,132 +22,158 @@ type Transaksi = {
   deskripsi: string | null
 }
 
-const transaksi: Transaksi[] = [
-  {
-    id: 1,
-    tanggal: new Date('2025-05-04'),
-    jumlah: 100000,
-    keterangan: 'Belanja bulanan',
-    kategori_id: 10,
-    deskripsi: null,
-  },
-  {
-    id: 2,
-    tanggal: new Date('2025-05-02'),
-    jumlah: 150000,
-    keterangan: 'Gaji freelance',
-    deskripsi: 'Project desain UI',
-    kategori_id: 3,
-  },
-  {
-    id: 3,
-    tanggal: new Date('2025-05-03'),
-    jumlah: 30000,
-    keterangan: 'Ngopi di kafe',
-    deskripsi: null,
-    kategori_id: 9,
-  },
-  {
-    id: 4,
-    tanggal: new Date('2025-05-04'),
-    jumlah: 50000,
-    keterangan: 'Top-up e-wallet',
-    deskripsi: 'Top-up OVO',
-    kategori_id: 1,
-  },
-  {
-    id: 5,
-    tanggal: new Date('2025-05-05'),
-    jumlah: 25_000_000,
-    keterangan: 'Gaji bulanan',
-    deskripsi: 'Gaji bulanan dari perusahaan',
-    kategori_id: 3,
-  },
-  {
-    id: 6,
-    tanggal: new Date('2025-05-06'),
-    jumlah: 45000,
-    keterangan: 'Beli buku',
-    deskripsi: 'Buku Pemrograman',
-    kategori_id: 6,
-  },
-  {
-    id: 7,
-    tanggal: new Date('2025-05-07'),
-    jumlah: 120000,
-    keterangan: 'Project front-end',
-    deskripsi: null,
-    kategori_id: 3,
-  },
-  {
-    id: 8,
-    tanggal: new Date('2025-05-08'),
-    jumlah: 20000,
-    keterangan: 'Parkir kampus',
-    deskripsi: null,
-    kategori_id: 1,
-  },
-  {
-    id: 9,
-    tanggal: new Date('2025-05-09'),
-    jumlah: 80000,
-    keterangan: 'Beli kuota internet',
-    deskripsi: '20GB untuk kuliah online',
-    kategori_id: 6,
-  },
-  {
-    id: 10,
-    tanggal: new Date('2025-05-10'),
-    jumlah: 100000,
-    keterangan: 'Bantu orang tua',
-    deskripsi: 'Transfer uang bulanan',
-    kategori_id: 5,
-  },
-  {
-    id: 11,
-    tanggal: new Date('2025-05-11'),
-    jumlah: 250000,
-    keterangan: 'Project design',
-    deskripsi: 'Logo design for client',
-    kategori_id: 3,
-  },
-  {
-    id: 12,
-    tanggal: new Date('2025-05-12'),
-    jumlah: 35000,
-    keterangan: 'Ojek online',
-    deskripsi: 'Pergi ke kampus',
-    kategori_id: 1,
-  },
-  {
-    id: 13,
-    tanggal: new Date('2025-05-13'),
-    jumlah: 150000,
-    keterangan: 'Paket data',
-    deskripsi: 'Unlimited 30 hari',
-    kategori_id: 6,
-  },
-  {
-    id: 14,
-    tanggal: new Date('2025-05-14'),
-    jumlah: 500000,
-    keterangan: 'Uang sekolah adik',
-    deskripsi: 'SPP bulan Mei',
-    kategori_id: 5,
-  },
-  {
-    id: 15,
-    tanggal: new Date('2025-05-15'),
-    jumlah: 300000,
-    keterangan: 'Freelance project',
-    deskripsi: 'Website maintenance',
-    kategori_id: 3,
-  },
-]
+// const transaksi: Transaksi[] = [
+//   {
+//     id: 1,
+//     tanggal: new Date('2025-05-04'),
+//     jumlah: 100000,
+//     keterangan: 'Belanja bulanan',
+//     kategori_id: 10,
+//     deskripsi: null,
+//   },
+//   {
+//     id: 2,
+//     tanggal: new Date('2025-05-02'),
+//     jumlah: 150000,
+//     keterangan: 'Gaji freelance',
+//     deskripsi: 'Project desain UI',
+//     kategori_id: 3,
+//   },
+//   {
+//     id: 3,
+//     tanggal: new Date('2025-05-03'),
+//     jumlah: 30000,
+//     keterangan: 'Ngopi di kafe',
+//     deskripsi: null,
+//     kategori_id: 9,
+//   },
+//   {
+//     id: 4,
+//     tanggal: new Date('2025-05-04'),
+//     jumlah: 50000,
+//     keterangan: 'Top-up e-wallet',
+//     deskripsi: 'Top-up OVO',
+//     kategori_id: 1,
+//   },
+//   {
+//     id: 5,
+//     tanggal: new Date('2025-05-05'),
+//     jumlah: 25_000_000,
+//     keterangan: 'Gaji bulanan',
+//     deskripsi: 'Gaji bulanan dari perusahaan',
+//     kategori_id: 3,
+//   },
+//   {
+//     id: 6,
+//     tanggal: new Date('2025-05-06'),
+//     jumlah: 45000,
+//     keterangan: 'Beli buku',
+//     deskripsi: 'Buku Pemrograman',
+//     kategori_id: 6,
+//   },
+//   {
+//     id: 7,
+//     tanggal: new Date('2025-05-07'),
+//     jumlah: 120000,
+//     keterangan: 'Project front-end',
+//     deskripsi: null,
+//     kategori_id: 3,
+//   },
+//   {
+//     id: 8,
+//     tanggal: new Date('2025-05-08'),
+//     jumlah: 20000,
+//     keterangan: 'Parkir kampus',
+//     deskripsi: null,
+//     kategori_id: 1,
+//   },
+//   {
+//     id: 9,
+//     tanggal: new Date('2025-05-09'),
+//     jumlah: 80000,
+//     keterangan: 'Beli kuota internet',
+//     deskripsi: '20GB untuk kuliah online',
+//     kategori_id: 6,
+//   },
+//   {
+//     id: 10,
+//     tanggal: new Date('2025-05-10'),
+//     jumlah: 100000,
+//     keterangan: 'Bantu orang tua',
+//     deskripsi: 'Transfer uang bulanan',
+//     kategori_id: 5,
+//   },
+//   {
+//     id: 11,
+//     tanggal: new Date('2025-05-11'),
+//     jumlah: 250000,
+//     keterangan: 'Project design',
+//     deskripsi: 'Logo design for client',
+//     kategori_id: 3,
+//   },
+//   {
+//     id: 12,
+//     tanggal: new Date('2025-05-12'),
+//     jumlah: 35000,
+//     keterangan: 'Ojek online',
+//     deskripsi: 'Pergi ke kampus',
+//     kategori_id: 1,
+//   },
+//   {
+//     id: 13,
+//     tanggal: new Date('2025-05-13'),
+//     jumlah: 150000,
+//     keterangan: 'Paket data',
+//     deskripsi: 'Unlimited 30 hari',
+//     kategori_id: 6,
+//   },
+//   {
+//     id: 14,
+//     tanggal: new Date('2025-05-14'),
+//     jumlah: 500000,
+//     keterangan: 'Uang sekolah adik',
+//     deskripsi: 'SPP bulan Mei',
+//     kategori_id: 5,
+//   },
+//   {
+//     id: 15,
+//     tanggal: new Date('2025-05-15'),
+//     jumlah: 300000,
+//     keterangan: 'Freelance project',
+//     deskripsi: 'Website maintenance',
+//     kategori_id: 3,
+//   },
+// ]
 
 function App() {
+  const [transaksi, setTransaksi] = useState<Transaksi[]>(() => {
+    // Load transactions from localStorage on initial render
+    const savedTransaksi = localStorage.getItem('transaksi')
+    if (savedTransaksi) {
+      // Parse the dates back to Date objects
+      return JSON.parse(savedTransaksi).map((t: Omit<Transaksi, 'tanggal'> & { tanggal: string }) => ({
+        ...t,
+        tanggal: new Date(t.tanggal),
+      }))
+    }
+    return []
+  })
+
+  // Save transactions to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('transaksi', JSON.stringify(transaksi))
+  }, [transaksi])
+
+  const addTransaksi = (newTransaksi: Transaksi) => {
+    setTransaksi([...transaksi, newTransaksi])
+    toast('Transaksi berhasil ditambahkan', {
+      description: `${newTransaksi.keterangan} - Rp${newTransaksi.jumlah.toLocaleString('id-ID')}`,
+    })
+  }
+
   return (
     <ThemeProvider>
+      <Toaster position="bottom-right" />
       <div className="bg-background min-h-screen">
         <ScrollArea className="hidden h-screen sm:block">
           <div className="container mx-auto w-full max-w-xl px-4 py-6 sm:px-6">
@@ -163,7 +195,7 @@ function App() {
                     <div className="text-muted-foreground">Terakhir transaksi 13 hari yang lalu</div>
                   </CardContent>
                   <CardFooter>
-                    <TambahTransaksi />
+                    <TambahTransaksi onAddTransaksi={addTransaksi} transaksi={transaksi} />
                   </CardFooter>
                 </Card>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -222,7 +254,7 @@ function App() {
                   <div className="text-muted-foreground">Terakhir transaksi 13 hari yang lalu</div>
                 </CardContent>
                 <CardFooter>
-                  <TambahTransaksi />
+                  <TambahTransaksi onAddTransaksi={addTransaksi} transaksi={transaksi} />
                 </CardFooter>
               </Card>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
