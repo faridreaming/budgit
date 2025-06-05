@@ -1,9 +1,26 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import type { Transaksi } from '@/data/transaksi'
-import { ChevronsUpDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import type { Kategori } from '@/data/kategori'
+import { ChevronsUpDown, MoreHorizontal } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { kategori as kategoriList } from '@/data/kategori'
 
+type Transaksi = {
+  id: number
+  tanggal: Date
+  jumlah: number
+  keterangan: string
+  kategori_id: Kategori['id']
+  deskripsi: string | null
+}
 export const columns: ColumnDef<Transaksi>[] = [
   {
     header: 'ID',
@@ -37,11 +54,12 @@ export const columns: ColumnDef<Transaksi>[] = [
     cell: ({ row }) => {
       const jumlah: number = row.original.jumlah
       const jumlahRp: string = jumlah.toLocaleString('id-ID', { minimumFractionDigits: 0 })
+      const kategoriObj = kategoriList.find((k) => k.id === row.original.kategori_id)
 
-      if (row.original.kategori.jenis === 'pengeluaran') {
-        return <div className="text-red-500">-Rp{jumlahRp}</div>
+      if (kategoriObj?.jenis === 'pengeluaran') {
+        return <div className="text-red-500 dark:text-red-400">-Rp{jumlahRp}</div>
       } else {
-        return <div className="text-green-500">+Rp{jumlahRp}</div>
+        return <div className="text-green-500 dark:text-green-400">+Rp{jumlahRp}</div>
       }
     },
   },
@@ -56,12 +74,12 @@ export const columns: ColumnDef<Transaksi>[] = [
     },
     accessorKey: 'keterangan',
     cell: ({ row }) => {
-      const kategori = row.original.kategori
+      const kategoriObj = kategoriList.find((k) => k.id === row.original.kategori_id)
       const keterangan = row.original.keterangan
       return (
         <div className="flex space-x-2">
           <Badge variant="outline">
-            {kategori.icon} {kategori.nama}
+            {kategoriObj?.icon} {kategoriObj?.nama}
           </Badge>
           <p>{keterangan}</p>
         </div>
@@ -74,6 +92,32 @@ export const columns: ColumnDef<Transaksi>[] = [
     cell: ({ row }) => {
       const deskripsi = row.original.deskripsi
       return deskripsi || '-'
+    },
+  },
+  {
+    id: 'aksi',
+    cell: ({ row }) => {
+      const payment = row.original
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id.toString())}>
+              Copy payment ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem>View payment details</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
     },
   },
 ]
