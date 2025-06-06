@@ -11,7 +11,7 @@ import type { Kategori } from '@/data/kategori'
 import { toast } from 'sonner'
 import { Toaster } from '@/components/ui/sonner'
 import { useState, useEffect } from 'react'
-import { Button } from './components/ui/button'
+import icon from '@/assets/icon.png'
 
 type Transaksi = {
   id: number
@@ -21,129 +21,6 @@ type Transaksi = {
   kategori_id: Kategori['id']
   deskripsi: string | null
 }
-
-// const transaksi: Transaksi[] = [
-//   {
-//     id: 1,
-//     tanggal: new Date('2025-05-04'),
-//     jumlah: 100000,
-//     keterangan: 'Belanja bulanan',
-//     kategori_id: 10,
-//     deskripsi: null,
-//   },
-//   {
-//     id: 2,
-//     tanggal: new Date('2025-05-02'),
-//     jumlah: 150000,
-//     keterangan: 'Gaji freelance',
-//     deskripsi: 'Project desain UI',
-//     kategori_id: 3,
-//   },
-//   {
-//     id: 3,
-//     tanggal: new Date('2025-05-03'),
-//     jumlah: 30000,
-//     keterangan: 'Ngopi di kafe',
-//     deskripsi: null,
-//     kategori_id: 9,
-//   },
-//   {
-//     id: 4,
-//     tanggal: new Date('2025-05-04'),
-//     jumlah: 50000,
-//     keterangan: 'Top-up e-wallet',
-//     deskripsi: 'Top-up OVO',
-//     kategori_id: 1,
-//   },
-//   {
-//     id: 5,
-//     tanggal: new Date('2025-05-05'),
-//     jumlah: 25_000_000,
-//     keterangan: 'Gaji bulanan',
-//     deskripsi: 'Gaji bulanan dari perusahaan',
-//     kategori_id: 3,
-//   },
-//   {
-//     id: 6,
-//     tanggal: new Date('2025-05-06'),
-//     jumlah: 45000,
-//     keterangan: 'Beli buku',
-//     deskripsi: 'Buku Pemrograman',
-//     kategori_id: 6,
-//   },
-//   {
-//     id: 7,
-//     tanggal: new Date('2025-05-07'),
-//     jumlah: 120000,
-//     keterangan: 'Project front-end',
-//     deskripsi: null,
-//     kategori_id: 3,
-//   },
-//   {
-//     id: 8,
-//     tanggal: new Date('2025-05-08'),
-//     jumlah: 20000,
-//     keterangan: 'Parkir kampus',
-//     deskripsi: null,
-//     kategori_id: 1,
-//   },
-//   {
-//     id: 9,
-//     tanggal: new Date('2025-05-09'),
-//     jumlah: 80000,
-//     keterangan: 'Beli kuota internet',
-//     deskripsi: '20GB untuk kuliah online',
-//     kategori_id: 6,
-//   },
-//   {
-//     id: 10,
-//     tanggal: new Date('2025-05-10'),
-//     jumlah: 100000,
-//     keterangan: 'Bantu orang tua',
-//     deskripsi: 'Transfer uang bulanan',
-//     kategori_id: 5,
-//   },
-//   {
-//     id: 11,
-//     tanggal: new Date('2025-05-11'),
-//     jumlah: 250000,
-//     keterangan: 'Project design',
-//     deskripsi: 'Logo design for client',
-//     kategori_id: 3,
-//   },
-//   {
-//     id: 12,
-//     tanggal: new Date('2025-05-12'),
-//     jumlah: 35000,
-//     keterangan: 'Ojek online',
-//     deskripsi: 'Pergi ke kampus',
-//     kategori_id: 1,
-//   },
-//   {
-//     id: 13,
-//     tanggal: new Date('2025-05-13'),
-//     jumlah: 150000,
-//     keterangan: 'Paket data',
-//     deskripsi: 'Unlimited 30 hari',
-//     kategori_id: 6,
-//   },
-//   {
-//     id: 14,
-//     tanggal: new Date('2025-05-14'),
-//     jumlah: 500000,
-//     keterangan: 'Uang sekolah adik',
-//     deskripsi: 'SPP bulan Mei',
-//     kategori_id: 5,
-//   },
-//   {
-//     id: 15,
-//     tanggal: new Date('2025-05-15'),
-//     jumlah: 300000,
-//     keterangan: 'Freelance project',
-//     deskripsi: 'Website maintenance',
-//     kategori_id: 3,
-//   },
-// ]
 
 function App() {
   const [transaksi, setTransaksi] = useState<Transaksi[]>(() => {
@@ -171,6 +48,26 @@ function App() {
     })
   }
 
+  // Calculate totals
+  const totalTransaksi = transaksi.reduce((sum, t) => sum + t.jumlah, 0)
+  const totalPengeluaran = transaksi.filter((t) => t.keterangan === 'Pengeluaran').reduce((sum, t) => sum + t.jumlah, 0)
+  const totalPenghasilan = transaksi.filter((t) => t.keterangan === 'Penghasilan').reduce((sum, t) => sum + t.jumlah, 0)
+
+  // Get last transaction date
+  const lastTransactionDate =
+    transaksi.length > 0 ? new Date(Math.max(...transaksi.map((t) => t.tanggal.getTime()))) : null
+  const daysSinceLastTransaction = lastTransactionDate
+    ? Math.floor((new Date().getTime() - lastTransactionDate.getTime()) / (1000 * 60 * 60 * 24))
+    : null
+
+  // Get current month's transactions
+  const currentMonth = new Date().getMonth()
+  const currentYear = new Date().getFullYear()
+  const currentMonthTransactions = transaksi.filter(
+    (t) => t.tanggal.getMonth() === currentMonth && t.tanggal.getFullYear() === currentYear
+  )
+  const currentMonthTotal = currentMonthTransactions.reduce((sum, t) => sum + t.jumlah, 0)
+
   return (
     <ThemeProvider>
       <Toaster position="bottom-right" />
@@ -179,7 +76,10 @@ function App() {
           <div className="container mx-auto w-full max-w-xl px-4 py-6 sm:px-6">
             <Card className="relative">
               <CardHeader>
-                <CardTitle>💰 BUDGIT</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <img src={icon} alt="Budgit" className="size-4" />
+                  BUDGIT
+                </CardTitle>
                 <CardDescription>Aplikasi Catatan Keuangan Pribadi</CardDescription>
               </CardHeader>
               <CardContent className="grid grid-cols-1 gap-3">
@@ -188,11 +88,20 @@ function App() {
                     <CardDescription className="relative flex items-center justify-between gap-2">
                       Total Transaksi
                     </CardDescription>
-                    <CardTitle className="text-2xl font-semibold tabular-nums">Rp100.000</CardTitle>
+                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                      Rp{totalTransaksi.toLocaleString('id-ID')}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="flex-col items-start gap-1 text-sm">
-                    <div className="line-clamp-1 flex gap-2 font-medium">+Rp100.000 transaksi bulan ini</div>
-                    <div className="text-muted-foreground">Terakhir transaksi 13 hari yang lalu</div>
+                    <div className="line-clamp-1 flex gap-2 font-medium">
+                      {currentMonthTotal > 0 ? '+' : ''}Rp{currentMonthTotal.toLocaleString('id-ID')} transaksi bulan
+                      ini
+                    </div>
+                    <div className="text-muted-foreground">
+                      {daysSinceLastTransaction !== null
+                        ? `Terakhir transaksi ${daysSinceLastTransaction} hari yang lalu`
+                        : 'Belum ada transaksi'}
+                    </div>
                   </CardContent>
                   <CardFooter>
                     <TambahTransaksi onAddTransaksi={addTransaksi} transaksi={transaksi} />
@@ -205,7 +114,7 @@ function App() {
                         Total Pengeluaran <ArrowUpRight size={16} className="text-red-500 dark:text-red-400" />
                       </CardDescription>
                       <CardTitle className="text-2xl font-semibold text-red-500 tabular-nums dark:text-red-400">
-                        Rp50.000
+                        Rp{totalPengeluaran.toLocaleString('id-ID')}
                       </CardTitle>
                     </CardHeader>
                   </Card>
@@ -215,7 +124,7 @@ function App() {
                         Total Penghasilan <ArrowDownLeft size={16} className="text-green-500 dark:text-green-400" />
                       </CardDescription>
                       <CardTitle className="text-2xl font-semibold text-green-500 tabular-nums dark:text-green-400">
-                        Rp50.000
+                        Rp{totalPenghasilan.toLocaleString('id-ID')}
                       </CardTitle>
                     </CardHeader>
                   </Card>
@@ -247,11 +156,19 @@ function App() {
                   <CardDescription className="relative flex items-center justify-between gap-2">
                     Total Transaksi
                   </CardDescription>
-                  <CardTitle className="text-2xl font-semibold tabular-nums">Rp100.000</CardTitle>
+                  <CardTitle className="text-2xl font-semibold tabular-nums">
+                    Rp{totalTransaksi.toLocaleString('id-ID')}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-col items-start gap-1 text-sm">
-                  <div className="line-clamp-1 flex gap-2 font-medium">+Rp100.000 transaksi bulan ini</div>
-                  <div className="text-muted-foreground">Terakhir transaksi 13 hari yang lalu</div>
+                  <div className="line-clamp-1 flex gap-2 font-medium">
+                    {currentMonthTotal > 0 ? '+' : ''}Rp{currentMonthTotal.toLocaleString('id-ID')} transaksi bulan ini
+                  </div>
+                  <div className="text-muted-foreground">
+                    {daysSinceLastTransaction !== null
+                      ? `Terakhir transaksi ${daysSinceLastTransaction} hari yang lalu`
+                      : 'Belum ada transaksi'}
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <TambahTransaksi onAddTransaksi={addTransaksi} transaksi={transaksi} />
@@ -263,7 +180,9 @@ function App() {
                     <CardDescription className="flex items-center justify-between gap-2">
                       Total Pengeluaran <ArrowUpRight size={16} />
                     </CardDescription>
-                    <CardTitle className="text-2xl font-semibold tabular-nums">Rp50.000</CardTitle>
+                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                      Rp{totalPengeluaran.toLocaleString('id-ID')}
+                    </CardTitle>
                   </CardHeader>
                 </Card>
                 <Card>
@@ -271,7 +190,9 @@ function App() {
                     <CardDescription className="flex items-center justify-between gap-2">
                       Total Penghasilan <ArrowDownLeft size={16} />
                     </CardDescription>
-                    <CardTitle className="text-2xl font-semibold tabular-nums">Rp50.000</CardTitle>
+                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                      Rp{totalPenghasilan.toLocaleString('id-ID')}
+                    </CardTitle>
                   </CardHeader>
                 </Card>
               </div>
