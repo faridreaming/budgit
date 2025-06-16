@@ -4,14 +4,16 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { ModeToggle } from '@/components/mode-toggle'
 import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import RiwayatTransaksi from '@/components/riwayat-transaksi/page'
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { ArrowDownLeft, ArrowUpRight, Check } from 'lucide-react'
 import TambahTransaksi from '@/components/TambahTransaksi'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Kategori } from '@/data/kategori'
+import { kategori } from '@/data/kategori'
 import { toast } from 'sonner'
 import { Toaster } from '@/components/ui/sonner'
 import { useState, useEffect } from 'react'
 import icon from '@/assets/icon.png'
+import CountUp from 'react-countup'
 
 type Transaksi = {
   id: number
@@ -24,10 +26,8 @@ type Transaksi = {
 
 function App() {
   const [transaksi, setTransaksi] = useState<Transaksi[]>(() => {
-    // Load transactions from localStorage on initial render
     const savedTransaksi = localStorage.getItem('transaksi')
     if (savedTransaksi) {
-      // Parse the dates back to Date objects
       return JSON.parse(savedTransaksi).map((t: Omit<Transaksi, 'tanggal'> & { tanggal: string }) => ({
         ...t,
         tanggal: new Date(t.tanggal),
@@ -36,37 +36,58 @@ function App() {
     return []
   })
 
-  // Save transactions to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('transaksi', JSON.stringify(transaksi))
   }, [transaksi])
 
   const addTransaksi = (newTransaksi: Transaksi) => {
     setTransaksi([...transaksi, newTransaksi])
-    toast('Transaksi berhasil ditambahkan', {
-      description: `${newTransaksi.keterangan} - Rp${newTransaksi.jumlah.toLocaleString('id-ID')}`,
+    toast(`Berhasil! ${newTransaksi.keterangan} sebesar Rp${newTransaksi.jumlah.toLocaleString('id-ID')}`, {
+      icon: <Check size={16} className="text-green-500 dark:text-green-400" />,
     })
   }
 
-  // Calculate totals
-  const totalTransaksi = transaksi.reduce((sum, t) => sum + t.jumlah, 0)
-  const totalPengeluaran = transaksi.filter((t) => t.keterangan === 'Pengeluaran').reduce((sum, t) => sum + t.jumlah, 0)
-  const totalPenghasilan = transaksi.filter((t) => t.keterangan === 'Penghasilan').reduce((sum, t) => sum + t.jumlah, 0)
+  const deleteTransaksi = (id: number) => {
+    setTransaksi(transaksi.filter((t) => t.id !== id))
+    toast('Berhasil! Transaksi berhasil dihapus', {
+      icon: <Check size={16} className="text-green-500 dark:text-green-400" />,
+    })
+  }
 
-  // Get last transaction date
+  const totalTransaksi = transaksi.reduce((sum, t) => sum + t.jumlah, 0)
+  const totalPengeluaran = transaksi
+    .filter((t) => {
+      const kategoriObj = kategori.find((k) => k.id === t.kategori_id)
+      return kategoriObj?.jenis === 'pengeluaran'
+    })
+    .reduce((sum, t) => sum + t.jumlah, 0)
+  const totalPenghasilan = transaksi
+    .filter((t) => {
+      const kategoriObj = kategori.find((k) => k.id === t.kategori_id)
+      return kategoriObj?.jenis === 'penghasilan'
+    })
+    .reduce((sum, t) => sum + t.jumlah, 0)
+
   const lastTransactionDate =
     transaksi.length > 0 ? new Date(Math.max(...transaksi.map((t) => t.tanggal.getTime()))) : null
   const daysSinceLastTransaction = lastTransactionDate
     ? Math.floor((new Date().getTime() - lastTransactionDate.getTime()) / (1000 * 60 * 60 * 24))
     : null
 
-  // Get current month's transactions
-  const currentMonth = new Date().getMonth()
-  const currentYear = new Date().getFullYear()
-  const currentMonthTransactions = transaksi.filter(
-    (t) => t.tanggal.getMonth() === currentMonth && t.tanggal.getFullYear() === currentYear
-  )
-  const currentMonthTotal = currentMonthTransactions.reduce((sum, t) => sum + t.jumlah, 0)
+  console.log('Now:', new Date().toLocaleDateString())
+  console.log('Last transaction:', lastTransactionDate?.toLocaleDateString())
+  console.log('Days since last transaction:', daysSinceLastTransaction)
+
+  const now = new Date()
+  const firstDayOfWeek = new Date(now)
+  firstDayOfWeek.setDate(now.getDate() - now.getDay())
+  firstDayOfWeek.setHours(0, 0, 0, 0)
+  const lastDayOfWeek = new Date(firstDayOfWeek)
+  lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6)
+  lastDayOfWeek.setHours(23, 59, 59, 999)
+
+  const currentWeekTransactions = transaksi.filter((t) => t.tanggal >= firstDayOfWeek && t.tanggal <= lastDayOfWeek)
+  const currentWeekTotal = currentWeekTransactions.reduce((sum, t) => sum + t.jumlah, 0)
 
   return (
     <ThemeProvider>
@@ -89,17 +110,19 @@ function App() {
                       Total Transaksi
                     </CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums">
-                      Rp{totalTransaksi.toLocaleString('id-ID')}
+                      Rp
+                      <CountUp end={totalTransaksi} duration={1.2} separator="." preserveValue={true} />
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex-col items-start gap-1 text-sm">
                     <div className="line-clamp-1 flex gap-2 font-medium">
-                      {currentMonthTotal > 0 ? '+' : ''}Rp{currentMonthTotal.toLocaleString('id-ID')} transaksi bulan
-                      ini
+                      {currentWeekTotal > 0 ? '+' : ''}Rp{currentWeekTotal.toLocaleString('id-ID')} transaksi minggu ini
                     </div>
                     <div className="text-muted-foreground">
                       {daysSinceLastTransaction !== null
-                        ? `Terakhir transaksi ${daysSinceLastTransaction} hari yang lalu`
+                        ? daysSinceLastTransaction === 0
+                          ? 'Terakhir transaksi hari ini'
+                          : `Terakhir transaksi ${daysSinceLastTransaction} hari yang lalu`
                         : 'Belum ada transaksi'}
                     </div>
                   </CardContent>
@@ -114,7 +137,8 @@ function App() {
                         Total Pengeluaran <ArrowUpRight size={16} className="text-red-500 dark:text-red-400" />
                       </CardDescription>
                       <CardTitle className="text-2xl font-semibold text-red-500 tabular-nums dark:text-red-400">
-                        Rp{totalPengeluaran.toLocaleString('id-ID')}
+                        Rp
+                        <CountUp end={totalPengeluaran} duration={1.2} separator="." preserveValue={true} />
                       </CardTitle>
                     </CardHeader>
                   </Card>
@@ -124,7 +148,8 @@ function App() {
                         Total Penghasilan <ArrowDownLeft size={16} className="text-green-500 dark:text-green-400" />
                       </CardDescription>
                       <CardTitle className="text-2xl font-semibold text-green-500 tabular-nums dark:text-green-400">
-                        Rp{totalPenghasilan.toLocaleString('id-ID')}
+                        Rp
+                        <CountUp end={totalPenghasilan} duration={1.2} separator="." preserveValue={true} />
                       </CardTitle>
                     </CardHeader>
                   </Card>
@@ -139,7 +164,7 @@ function App() {
                 <CardTitle>Riwayat Transaksi</CardTitle>
               </CardHeader>
               <CardContent>
-                <RiwayatTransaksi data={transaksi} />
+                <RiwayatTransaksi data={transaksi} onDeleteTransaksi={deleteTransaksi} />
               </CardContent>
             </Card>
           </div>
@@ -157,16 +182,19 @@ function App() {
                     Total Transaksi
                   </CardDescription>
                   <CardTitle className="text-2xl font-semibold tabular-nums">
-                    Rp{totalTransaksi.toLocaleString('id-ID')}
+                    Rp
+                    <CountUp end={totalTransaksi} duration={1.2} separator="," preserveValue={true} />
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-col items-start gap-1 text-sm">
                   <div className="line-clamp-1 flex gap-2 font-medium">
-                    {currentMonthTotal > 0 ? '+' : ''}Rp{currentMonthTotal.toLocaleString('id-ID')} transaksi bulan ini
+                    {currentWeekTotal > 0 ? '+' : ''}Rp{currentWeekTotal.toLocaleString('id-ID')} transaksi minggu ini
                   </div>
                   <div className="text-muted-foreground">
                     {daysSinceLastTransaction !== null
-                      ? `Terakhir transaksi ${daysSinceLastTransaction} hari yang lalu`
+                      ? daysSinceLastTransaction === 0
+                        ? 'Terakhir transaksi hari ini'
+                        : `Terakhir transaksi ${daysSinceLastTransaction} hari yang lalu`
                       : 'Belum ada transaksi'}
                   </div>
                 </CardContent>
@@ -181,7 +209,8 @@ function App() {
                       Total Pengeluaran <ArrowUpRight size={16} />
                     </CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums">
-                      Rp{totalPengeluaran.toLocaleString('id-ID')}
+                      Rp
+                      <CountUp end={totalPengeluaran} duration={1.2} separator="," preserveValue={true} />
                     </CardTitle>
                   </CardHeader>
                 </Card>
@@ -191,7 +220,8 @@ function App() {
                       Total Penghasilan <ArrowDownLeft size={16} />
                     </CardDescription>
                     <CardTitle className="text-2xl font-semibold tabular-nums">
-                      Rp{totalPenghasilan.toLocaleString('id-ID')}
+                      Rp
+                      <CountUp end={totalPenghasilan} duration={1.2} separator="," preserveValue={true} />
                     </CardTitle>
                   </CardHeader>
                 </Card>
@@ -206,7 +236,7 @@ function App() {
               <CardTitle>Riwayat Transaksi</CardTitle>
             </CardHeader>
             <CardContent>
-              <RiwayatTransaksi data={transaksi} />
+              <RiwayatTransaksi data={transaksi} onDeleteTransaksi={deleteTransaksi} />
             </CardContent>
           </Card>
         </div>
