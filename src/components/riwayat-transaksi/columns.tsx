@@ -3,14 +3,7 @@ import type { Kategori } from '@/data/kategori'
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { kategori as kategoriList } from '@/data/kategori'
 
 type Transaksi = {
@@ -21,7 +14,7 @@ type Transaksi = {
   kategori_id: Kategori['id']
   deskripsi: string | null
 }
-export const columns: ColumnDef<Transaksi>[] = [
+export const columns: (onDeleteRequest: (id: number) => void) => ColumnDef<Transaksi>[] = (onDeleteRequest) => [
   {
     header: 'ID',
     accessorKey: 'id',
@@ -97,24 +90,19 @@ export const columns: ColumnDef<Transaksi>[] = [
   {
     id: 'aksi',
     cell: ({ row }) => {
-      const payment = row.original
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Aksi</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id.toString())}>
-              Copy payment ID
+            <DropdownMenuItem variant="destructive" onClick={() => onDeleteRequest(row.original.id)}>
+              Hapus
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Edit</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
