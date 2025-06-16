@@ -95,7 +95,7 @@ export default function TambahTransaksi({
       ...values,
       id: transaksi.length + 1,
       kategori_id: Number(values.kategori),
-      deskripsi: null,
+      deskripsi: values.deskripsi ?? null,
     })
   }
 
