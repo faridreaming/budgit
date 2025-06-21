@@ -276,6 +276,7 @@ export default function TambahTransaksi({
                           <SelectContent>
                             {activeKategori.map((kategori) => (
                               <SelectItem key={kategori.id} value={kategori.id.toString()}>
+                                <span className="hidden">{kategori.nama}</span>
                                 {kategori.icon} {kategori.nama}
                               </SelectItem>
                             ))}

@@ -74,10 +74,6 @@ function App() {
     ? Math.floor((new Date().getTime() - lastTransactionDate.getTime()) / (1000 * 60 * 60 * 24))
     : null
 
-  console.log('Now:', new Date().toLocaleDateString())
-  console.log('Last transaction:', lastTransactionDate?.toLocaleDateString())
-  console.log('Days since last transaction:', daysSinceLastTransaction)
-
   const now = new Date()
   const firstDayOfWeek = new Date(now)
   firstDayOfWeek.setDate(now.getDate() - now.getDay())
@@ -169,10 +165,13 @@ function App() {
             </Card>
           </div>
         </ScrollArea>
-        <div className="container mx-auto w-full max-w-xl px-4 py-6 sm:hidden sm:px-6">
+        <div className="container mx-auto block w-full max-w-xl px-4 py-6 sm:hidden sm:px-6">
           <Card className="relative">
             <CardHeader>
-              <CardTitle>💰 BUDGIT</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <img src={icon} alt="Budgit" className="size-4" />
+                BUDGIT
+              </CardTitle>
               <CardDescription>Aplikasi Catatan Keuangan Pribadi</CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 gap-3">
@@ -183,7 +182,7 @@ function App() {
                   </CardDescription>
                   <CardTitle className="text-2xl font-semibold tabular-nums">
                     Rp
-                    <CountUp end={totalTransaksi} duration={1.2} separator="," preserveValue={true} />
+                    <CountUp end={totalTransaksi} duration={1.2} separator="." preserveValue={true} />
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-col items-start gap-1 text-sm">
@@ -206,22 +205,22 @@ function App() {
                 <Card>
                   <CardHeader>
                     <CardDescription className="flex items-center justify-between gap-2">
-                      Total Pengeluaran <ArrowUpRight size={16} />
+                      Total Pengeluaran <ArrowUpRight size={16} className="text-red-500 dark:text-red-400" />
                     </CardDescription>
-                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                    <CardTitle className="text-2xl font-semibold text-red-500 tabular-nums dark:text-red-400">
                       Rp
-                      <CountUp end={totalPengeluaran} duration={1.2} separator="," preserveValue={true} />
+                      <CountUp end={totalPengeluaran} duration={1.2} separator="." preserveValue={true} />
                     </CardTitle>
                   </CardHeader>
                 </Card>
                 <Card>
                   <CardHeader>
                     <CardDescription className="flex items-center justify-between gap-2">
-                      Total Penghasilan <ArrowDownLeft size={16} />
+                      Total Penghasilan <ArrowDownLeft size={16} className="text-green-500 dark:text-green-400" />
                     </CardDescription>
-                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                    <CardTitle className="text-2xl font-semibold text-green-500 tabular-nums dark:text-green-400">
                       Rp
-                      <CountUp end={totalPenghasilan} duration={1.2} separator="," preserveValue={true} />
+                      <CountUp end={totalPenghasilan} duration={1.2} separator="." preserveValue={true} />
                     </CardTitle>
                   </CardHeader>
                 </Card>
