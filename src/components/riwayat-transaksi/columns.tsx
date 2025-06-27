@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { kategori as kategoriList } from '@/data/kategori'
-import EditTransaksi from '../EditTransaksi'
 
 type Transaksi = {
   id: number
@@ -15,7 +14,10 @@ type Transaksi = {
   kategori_id: Kategori['id']
   deskripsi: string | null
 }
-export const columns: (onDeleteRequest: (id: number) => void, onUpdateRequest: (id: number) => void) => ColumnDef<Transaksi>[] = (onDeleteRequest, onUpdateRequest) => [
+export const columns: (
+  onDeleteRequest: (id: number) => void,
+  onUpdateRequest: (id: number) => void
+) => ColumnDef<Transaksi>[] = (onDeleteRequest, onUpdateRequest) => [
   {
     header: 'ID',
     accessorKey: 'id',
@@ -103,9 +105,7 @@ export const columns: (onDeleteRequest: (id: number) => void, onUpdateRequest: (
             <DropdownMenuItem variant="destructive" onClick={() => onDeleteRequest(row.original.id)}>
               Hapus
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onUpdateRequest(row.original.id)}>
-              Edit
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onUpdateRequest(row.original.id)}>Edit</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
