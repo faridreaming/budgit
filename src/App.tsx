@@ -49,7 +49,7 @@ function App() {
 
   const deleteTransaksi = (id: number) => {
     setTransaksi(transaksi.filter((t) => t.id !== id))
-    toast('Berhasil! Transaksi berhasil dihapus', {
+    toast('Transaksi berhasil dihapus!', {
       icon: <Check size={16} className="text-green-500 dark:text-green-400" />,
     })
   }
