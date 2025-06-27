@@ -158,6 +158,7 @@ export default function EditTransaksi({
                             type="text"
                             className="w-full text-center"
                             placeholder="Masukkan jumlah"
+                            inputMode="numeric"
                             autoFocus
                             value={field.value ? new Intl.NumberFormat('id-ID').format(field.value) : ''}
                             onChange={(e) => {
