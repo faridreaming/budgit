@@ -71,7 +71,6 @@ export default function TambahTransaksi({
   })
 
   const jenisValue = form.watch('jenis')
-  const jumlahValue = form.watch('jumlah')
 
   const [activeKategori, setActiveKategori] = useState<Kategori[]>(
     kategori.filter((kategori) => kategori.jenis === jenisValue)
@@ -133,15 +132,15 @@ export default function TambahTransaksi({
                         </Button>
                         <FormControl>
                           <Input
-                            type="number"
-                            className="w-full [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                            min={min}
-                            value={jumlahValue === 0 ? '' : jumlahValue}
+                            type="text"
+                            className="w-full text-center"
                             placeholder="Masukkan jumlah"
                             autoFocus
+                            value={field.value ? new Intl.NumberFormat('id-ID').format(field.value) : ''}
                             onChange={(e) => {
-                              const val = Number(e.target.value)
-                              field.onChange(isNaN(val) ? 0 : Math.max(min, val))
+                              const rawValue = e.target.value.replace(/[^0-9]/g, '')
+                              const numericValue = rawValue ? Number(rawValue) : 0
+                              field.onChange(numericValue)
                             }}
                           />
                         </FormControl>
@@ -216,7 +215,7 @@ export default function TambahTransaksi({
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
-                          <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                          <Calendar mode="single" selected={field.value} onSelect={field.onChange} />
                         </PopoverContent>
                       </Popover>
                     </div>
