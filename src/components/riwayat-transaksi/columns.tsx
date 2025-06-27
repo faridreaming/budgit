@@ -15,7 +15,7 @@ type Transaksi = {
   kategori_id: Kategori['id']
   deskripsi: string | null
 }
-export const columns: (onDeleteRequest: (id: number) => void) => ColumnDef<Transaksi>[] = (onDeleteRequest) => [
+export const columns: (onDeleteRequest: (id: number) => void, onUpdateRequest: (id: number) => void) => ColumnDef<Transaksi>[] = (onDeleteRequest, onUpdateRequest) => [
   {
     header: 'ID',
     accessorKey: 'id',
@@ -103,8 +103,8 @@ export const columns: (onDeleteRequest: (id: number) => void) => ColumnDef<Trans
             <DropdownMenuItem variant="destructive" onClick={() => onDeleteRequest(row.original.id)}>
               Hapus
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <EditTransaksi />
+            <DropdownMenuItem onClick={() => onUpdateRequest(row.original.id)}>
+              Edit
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

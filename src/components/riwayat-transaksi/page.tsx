@@ -2,15 +2,8 @@ import { useState } from 'react'
 import { columns } from './columns'
 import { DataTable } from './data-table'
 import type { Kategori } from '@/data/kategori'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import DeleteTransaksi from '../DeleteTransaksi'
+import EditTransaksi from '../EditTransaksi'
 
 type Transaksi = {
   id: number
@@ -24,50 +17,53 @@ type Transaksi = {
 export default function RiwayatTransaksi({
   data,
   onDeleteTransaksi,
+  onUpdateTransaksi,
 }: {
   data: Transaksi[]
   onDeleteTransaksi: (id: number) => void
+  onUpdateTransaksi: (transaksi: Transaksi) => void
 }) {
   const [deleteId, setDeleteId] = useState<number | null>(null)
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [updateId, setUpdateId] = useState<number | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false)
 
   const handleDeleteRequest = (id: number) => {
     setDeleteId(id)
-    setDialogOpen(true)
+    setDeleteDialogOpen(true)
+  }
+
+  const handleUpdateRequest = (id: number) => {
+    setUpdateId(id)
+    setUpdateDialogOpen(true)
   }
 
   const handleConfirmDelete = () => {
     if (deleteId !== null) {
       onDeleteTransaksi(deleteId)
       setDeleteId(null)
-      setDialogOpen(false)
+      setDeleteDialogOpen(false)
     }
   }
 
   const handleCancel = () => {
     setDeleteId(null)
-    setDialogOpen(false)
+    setUpdateId(null)
+    setUpdateDialogOpen(false)
   }
 
   return (
     <>
-      <DataTable columns={columns(handleDeleteRequest)} data={data} />
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="dark:bg-card sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Konfirmasi Hapus</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>Apakah Anda yakin ingin menghapus transaksi ini?</DialogDescription>
-          <DialogFooter>
-            <Button onClick={handleCancel} variant="outline" className="text-foreground">
-              Batal
-            </Button>
-            <Button onClick={handleConfirmDelete} variant="destructive">
-              Hapus
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DataTable columns={columns(handleDeleteRequest, handleUpdateRequest)} data={data} />
+      <DeleteTransaksi onDeleteRequest={handleConfirmDelete} onCancel={handleCancel} open={deleteDialogOpen} setOpen={setDeleteDialogOpen} />
+      <EditTransaksi open={updateDialogOpen} setOpen={setUpdateDialogOpen} onUpdateRequest={onUpdateTransaksi} onCancel={handleCancel} transaksi={data.find((transaksi) => transaksi.id === updateId) ?? {
+        id: 0,
+        tanggal: new Date(),
+        jumlah: 0,
+        keterangan: '',
+        kategori_id: 0,
+        deskripsi: null,
+      }} />
     </>
   )
 }

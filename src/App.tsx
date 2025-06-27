@@ -54,6 +54,13 @@ function App() {
     })
   }
 
+  const updateTransaksi = (updatedTransaksi: Transaksi) => {
+    setTransaksi(transaksi.map((t) => (t.id === updatedTransaksi.id ? updatedTransaksi : t)))
+    toast('Transaksi berhasil diubah!', {
+      icon: <Check size={16} className="text-green-500 dark:text-green-400" />,
+    })
+  }
+
   const totalTransaksi = transaksi.reduce((sum, t) => sum + t.jumlah, 0)
   const totalPengeluaran = transaksi
     .filter((t) => {
@@ -89,6 +96,7 @@ function App() {
     <ThemeProvider>
       <Toaster position="bottom-right" />
       <div className="bg-background min-h-screen">
+        {/* Desktop */}
         <ScrollArea className="hidden h-screen sm:block">
           <div className="container mx-auto w-full max-w-xl px-4 py-6 sm:px-6">
             <Card className="relative">
@@ -160,11 +168,22 @@ function App() {
                 <CardTitle>Riwayat Transaksi</CardTitle>
               </CardHeader>
               <CardContent>
-                <RiwayatTransaksi data={transaksi} onDeleteTransaksi={deleteTransaksi} />
+                <RiwayatTransaksi
+                  data={transaksi}
+                  onDeleteTransaksi={deleteTransaksi}
+                  onUpdateTransaksi={updateTransaksi}
+                />
               </CardContent>
             </Card>
+            <footer className="text-muted-foreground mt-6 text-center text-sm">
+              Made with 🍞 by{' '}
+              <a href="https://github.com/faridreaming" target="_blank" rel="noopener noreferrer" className="underline">
+                @faridreaming
+              </a>
+            </footer>
           </div>
         </ScrollArea>
+        {/* Mobile */}
         <div className="container mx-auto block w-full max-w-xl px-4 py-6 sm:hidden sm:px-6">
           <Card className="relative">
             <CardHeader>
@@ -235,9 +254,19 @@ function App() {
               <CardTitle>Riwayat Transaksi</CardTitle>
             </CardHeader>
             <CardContent>
-              <RiwayatTransaksi data={transaksi} onDeleteTransaksi={deleteTransaksi} />
+              <RiwayatTransaksi
+                data={transaksi}
+                onDeleteTransaksi={deleteTransaksi}
+                onUpdateTransaksi={updateTransaksi}
+              />
             </CardContent>
           </Card>
+          <footer className="text-muted-foreground mt-6 text-center text-sm">
+            Made with 🍞 by{' '}
+            <a href="https://github.com/faridreaming" target="_blank" rel="noopener noreferrer" className="underline">
+              @faridreaming
+            </a>
+          </footer>
         </div>
       </div>
     </ThemeProvider>
