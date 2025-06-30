@@ -56,14 +56,14 @@ export default function Dashboard({
 
   return (
     <Card className="relative">
-      <CardHeader>
+      <CardHeader className="px-4 sm:px-6">
         <CardTitle className="flex items-center gap-2">
           <img src={icon} alt="Budgit" className="size-4" />
           BUDGIT
         </CardTitle>
         <CardDescription>Aplikasi Catatan Keuangan Pribadi</CardDescription>
       </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-3">
+      <CardContent className="grid grid-cols-1 gap-3 p-4 sm:p-6">
         <Card>
           <CardHeader>
             <CardDescription className="relative flex items-center justify-between gap-2">

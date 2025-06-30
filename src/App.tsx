@@ -67,10 +67,10 @@ function App() {
           <div className="container mx-auto w-full max-w-xl px-4 py-6 sm:px-6">
             <Dashboard transaksi={transaksi} addTransaksi={addTransaksi} />
             <Card className="mt-6">
-              <CardHeader>
+              <CardHeader className="px-4 sm:px-6">
                 <CardTitle>Riwayat Transaksi</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-4 sm:px-6">
                 <RiwayatTransaksi
                   data={transaksi}
                   onDeleteTransaksi={deleteTransaksi}
@@ -85,10 +85,10 @@ function App() {
         <div className="container mx-auto block w-full max-w-xl px-4 py-6 sm:hidden sm:px-6">
           <Dashboard transaksi={transaksi} addTransaksi={addTransaksi} />
           <Card className="mt-6">
-            <CardHeader>
+            <CardHeader className="px-4 sm:px-6">
               <CardTitle>Riwayat Transaksi</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 sm:px-6">
               <RiwayatTransaksi
                 data={transaksi}
                 onDeleteTransaksi={deleteTransaksi}
