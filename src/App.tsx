@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import RiwayatTransaksi from '@/components/riwayat-transaksi/page'
 import { Check } from 'lucide-react'
 import Dashboard from '@/components/Dashboard'
+import Footer from '@/components/Footer'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import type { Kategori } from '@/data/kategori'
 import { toast } from 'sonner'
@@ -77,12 +78,7 @@ function App() {
                 />
               </CardContent>
             </Card>
-            <footer className="text-muted-foreground mt-6 text-center text-sm">
-              Made with 🍞 by{' '}
-              <a href="https://github.com/faridreaming" target="_blank" rel="noopener noreferrer" className="underline">
-                @faridreaming
-              </a>
-            </footer>
+            <Footer />
           </div>
         </ScrollArea>
         {/* Mobile */}
@@ -100,12 +96,7 @@ function App() {
               />
             </CardContent>
           </Card>
-          <footer className="text-muted-foreground mt-6 text-center text-sm">
-            Made with 🍞 by{' '}
-            <a href="https://github.com/faridreaming" target="_blank" rel="noopener noreferrer" className="underline">
-              @faridreaming
-            </a>
-          </footer>
+          <Footer />
         </div>
       </div>
     </ThemeProvider>

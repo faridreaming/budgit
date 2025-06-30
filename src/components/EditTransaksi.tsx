@@ -141,8 +141,8 @@ export default function EditTransaksi({
                 name="jumlah"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <FormLabel className="justify-end-safe text-right">Jumlah (Rp)</FormLabel>
+                    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-4 sm:gap-4">
+                      <FormLabel className="sm:justify-end-safe sm:text-right">Jumlah (Rp)</FormLabel>
                       <div className="col-span-3 flex items-center gap-2">
                         <Button
                           type="button"
@@ -194,8 +194,8 @@ export default function EditTransaksi({
                 name="keterangan"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <FormLabel className="justify-end-safe text-right">Keterangan</FormLabel>
+                    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-4 sm:gap-4">
+                      <FormLabel className="sm:justify-end-safe sm:text-right">Keterangan</FormLabel>
                       <FormControl>
                         <Input {...field} placeholder="Masukkan keterangan" className="col-span-3" />
                       </FormControl>
@@ -215,28 +215,26 @@ export default function EditTransaksi({
                 name="tanggal"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <FormLabel className="justify-end-safe text-right">Tanggal</FormLabel>
+                    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-4 sm:gap-4">
+                      <FormLabel className="sm:justify-end-safe sm:text-right">Tanggal</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                'col-span-3 justify-start text-left font-normal',
-                                !field.value && 'text-muted-foreground'
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {field.value ? (
-                                format(field.value, 'PPP', {
-                                  locale: id,
-                                })
-                              ) : (
-                                <span>Pilih tanggal</span>
-                              )}
-                            </Button>
-                          </FormControl>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              'col-span-3 justify-start text-left font-normal',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? (
+                              format(field.value, 'PPP', {
+                                locale: id,
+                              })
+                            ) : (
+                              <span>Pilih tanggal</span>
+                            )}
+                          </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                           <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
@@ -258,8 +256,8 @@ export default function EditTransaksi({
                 name="jenis"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <FormLabel className="justify-end-safe text-right">Jenis</FormLabel>
+                    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-4 sm:gap-4">
+                      <FormLabel className="sm:justify-end-safe sm:text-right">Jenis</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="col-span-3 w-full">
@@ -287,8 +285,8 @@ export default function EditTransaksi({
                 name="kategori"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <FormLabel className="justify-end-safe text-right">Kategori</FormLabel>
+                    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-4 sm:gap-4">
+                      <FormLabel className="sm:justify-end-safe sm:text-right">Kategori</FormLabel>
                       <div className="col-span-3 flex items-center gap-2">
                         <Select value={field.value} onValueChange={field.onChange}>
                           <FormControl>
@@ -326,8 +324,8 @@ export default function EditTransaksi({
                 name="deskripsi"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <FormLabel className="text-right">Deskripsi (opsional)</FormLabel>
+                    <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-4 sm:gap-4">
+                      <FormLabel className="sm:justify-end-safe sm:text-right">Deskripsi (opsional)</FormLabel>
                       <FormControl>
                         <Input {...field} placeholder="Masukkan deskripsi" className="col-span-3" />
                       </FormControl>
